@@ -1,0 +1,6 @@
+@Web_RsystemDemoProject_HostAddress = http://localhost:5237
+
+GET {{Web_RsystemDemoProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
