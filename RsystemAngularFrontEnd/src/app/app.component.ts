@@ -34,5 +34,4 @@ export class AppComponent implements OnInit {
 
   
 
-  title = 'Angular.client';
 }

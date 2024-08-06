@@ -9,7 +9,7 @@ builder.Services.AddDbContext<DataBaseContext>(option => { option.UseSqlServer(b
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://127.0.0.1:4200")
+        builder => builder.WithOrigins( "http://localhost:4200")
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
