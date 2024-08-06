@@ -1,6 +1,0 @@
-@RsystemAngularApp.Server_HostAddress = http://localhost:5180
-
-GET {{RsystemAngularApp.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
