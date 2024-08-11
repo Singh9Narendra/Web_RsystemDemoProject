@@ -59,31 +59,38 @@ namespace Web_RsystemDemoProject.Controllers
         [HttpGet("Get")]
         public async Task<PaginatedList<Stories>> Get(string query, int pageIndex, int pageSize)
         {
-            List<Stories>? stories = new List<Stories>();
-
-            var storiesIdList = await storiesService.GetStoriesIdList();
-            if (storiesIdList != null)
+            try
             {
+                List<Stories>? stories = new List<Stories>();
 
-                var tasks = storiesIdList.Select(GetStories);
-                stories = (await Task.WhenAll(tasks))
-            .ToList(); 
-                if (!String.IsNullOrEmpty(query))
+                var storiesIdList = await storiesService.GetStoriesIdList();
+                if (storiesIdList != null)
                 {
-                    stories = stories.Where(s =>
-                                       s.Title.ToLower().IndexOf(query.ToLower()) > -1 ).ToList()
-                                       ; 
+
+                    var tasks = storiesIdList.Select(GetStories);
+                    stories = (await Task.WhenAll(tasks))
+                .ToList();
+                    if (!String.IsNullOrEmpty(query))
+                    {
+                        stories = stories.Where(s =>
+                                           s.Title.ToLower().IndexOf(query.ToLower()) > -1).ToList()
+                                           ;
+                    }
                 }
+
+                var count = stories.Count();
+                var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+                return new PaginatedList<Stories>(stories.OrderBy(b => b.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList(), pageIndex, totalPages);
             }
-
-            var count = stories.Count();
-            var totalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            return new PaginatedList<Stories>(stories.OrderBy(b => b.Id)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToList(), pageIndex, totalPages);
-        }
+            catch (Exception ex)
+            {
+                throw new Exception("Data Not Found Error Occured."+ex.Message);
+            }
+            }
 
 
 
@@ -96,23 +103,31 @@ namespace Web_RsystemDemoProject.Controllers
         [HttpGet("GetIndex")]
         public async Task<PaginatedList<Stories>> GetIndex(int pageIndex, int pageSize)
         {
-            List<Stories>? stories = new List<Stories>();
+            try
+            {
+                List<Stories>? stories = new List<Stories>();
 
-            var storiesIdList = await storiesService.GetStoriesIdList();
-            if (storiesIdList != null)
+                var storiesIdList = await storiesService.GetStoriesIdList();
+                if (storiesIdList != null)
+                {
+
+                    var tasks = storiesIdList.Select(GetStories);
+                    stories = (await Task.WhenAll(tasks))
+                .ToList();
+                }
+
+                var count = stories.Count();
+                var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+                return new PaginatedList<Stories>(stories.OrderBy(b => b.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).ToList(), pageIndex, totalPages);
+            }
+            catch (Exception ex )
             {
 
-                var tasks = storiesIdList.Select(GetStories);
-                stories = (await Task.WhenAll(tasks))
-            .ToList();
-            }        
-
-            var count =  stories.Count();
-            var totalPages = (int)Math.Ceiling(count / (double)pageSize);
-     
-            return new PaginatedList<Stories>(stories.OrderBy(b => b.Id)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize).ToList(), pageIndex, totalPages);
+                throw new Exception("Data Not Found Error Occured." + ex.Message);
+            }
         }
 
     }

@@ -12,7 +12,10 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader());
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new GlobalExceptionFilter());
+});
 builder.Services.AddMemoryCache();
 
 builder.Services.AddSwaggerGen();
