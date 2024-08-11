@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Web_RsystemDemoProject.Data;
 using Web_RsystemDemoProject.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DataBaseContext>(option => { option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -15,6 +13,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IStoriesService, StoriesService>();
 

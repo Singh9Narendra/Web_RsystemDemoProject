@@ -4,8 +4,8 @@ namespace Web_RsystemDemoProject.Service
 {
     public interface IStoriesService
     {
-        IEnumerable<Stories> GetStories();
-        IEnumerable<Stories> GetStoriesById(int id);
+        Task<Stories> GetStories(string id);
+        Task<IEnumerable<string>> GetStoriesIdList();
 
     }
 }

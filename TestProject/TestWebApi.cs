@@ -7,32 +7,34 @@ using System.Threading.Tasks;
 using Web_RsystemDemoProject.Service;
 using Web_RsystemDemoProject.Model;
 using Web_RsystemDemoProject.Controllers;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace TestProject
 {
+    /// <summary>
+    /// Test Web Api Class
+    /// </summary>
     [TestClass]
     public class TestWebApi
     {
 
+
+        /// <summary>
+        /// check whether Stories controller and Stories Service working properly
+        /// </summary>
         [TestMethod]
-        public void TestGetStories()
-        {
-            var list = new List<Stories>()
-            {
-                new Stories() { StoriesId=1,Url="Newdemo.com",Title="Newdemo"},
-                 new Stories() { StoriesId=2,Url="Newdemo.com",Title="Newdemo"}
-            };
-          
+        public void TestStoriesController()
+        {    
+             var storiesRepository = new Mock<IStoriesService>();
+            var memoryRepository = new Mock<IMemoryCache>();
 
-            var storiesRepository = new Mock<IStoriesService>();
-            storiesRepository.Setup(x => x.GetStories()).Returns(list);
-            var controller = new StoriesController(storiesRepository.Object);
-            var getStories = controller.Get();
-            Assert.IsNotNull(getStories);
-      
-
+            storiesRepository.Setup(x => x.GetStories("1")).ReturnsAsync(new Stories() { Id = 1, Url = "Newdemo.com", Title = "Newdemo" });
+            var controller = new StoriesController(memoryRepository.Object, storiesRepository.Object);
+            var getStories = controller.GetIndex(1,1);
+            Assert.IsNotNull(getStories);    
         }
 
-        
+
+
     }
 }

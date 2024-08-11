@@ -1,5 +1,8 @@
 ﻿namespace Web_RsystemDemoProject.Model
 {
+    /// <summary>
+    /// Common Response Class
+    /// </summary>
     public class ResponseDto
     {
 
